@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {openai.app.registered_name}-{openai.app.edge.node_name}
+  labels:
+    app: {openai.app.registered_name}-{openai.app.edge.node_name}
+    app.id: "{openai.app.id}"
+    app.name: "{openai.app.registered_name}"
+    app.version: "{openai.app.version}"
+    openai.yaml.format.version: "v1"
+    istation.openai.auo/app_web_url_path: ui
+spec:
+  hostIPC: true
+  nodeName: {openai.app.edge.node_name}
+  nodeSelector:
+    "kubernetes.io/os": linux
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+          - key: kubernetes.io/arch
+            operator: In
+            values:
+            - amd64
+            - arm64
+  containers:
+  - name: jarvis
+    image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.2
+    ports:
+    - containerPort: 3000
+  - name: pepper
+    image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.2
+    ports:
+    - containerPort: 4234
+
+  tolerations:
+  - key: "node.kubernetes.io/not-ready"
+    operator: "Exists"
+    effect: "NoExecute"
+  - key: "node.kubernetes.io/unreachable"
+    operator: "Exists"
+    effect: "NoExecute"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {openai.app.registered_name}-{openai.app.edge.node_name}
+spec:
+  ports:
+  - name: pepper
+    port: {openai.app.edge.deploy.ports.0}
+    targetPort: 4234
+  externalIPs:
+  - {cluster.ip}
+  - {openai.app.edge.node_public_ip}
+  selector:
+    app: {openai.app.registered_name}-{openai.app.edge.node_name}
