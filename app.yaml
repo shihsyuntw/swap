@@ -49,12 +49,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {openai.app.registered_name}-{openai.app.edge.node_name}
+  name: {openai.app.registered_name}-{openai.app.edge.node_name}-pepper
 spec:
   ports:
-  - name: pepper
+  - name: pepper-port
     port: {openai.app.edge.deploy.ports.0}
     targetPort: 4234
+  externalIPs:
+  - {cluster.ip}
+  - {openai.app.edge.node_public_ip}
+  selector:
+    app: {openai.app.registered_name}-{openai.app.edge.node_name}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {openai.app.registered_name}-{openai.app.edge.node_name}-jarvis
+spec:
+  ports:
+  - name: jarvis-port
+    port: {openai.app.edge.deploy.ports.1}
+    targetPort: 3000
   externalIPs:
   - {cluster.ip}
   - {openai.app.edge.node_public_ip}
