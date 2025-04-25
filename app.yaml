@@ -30,14 +30,9 @@ spec:
             - arm64
   containers:
   - name: jarvis
-    image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.2
-    ports:
-    - containerPort: 3000
+    image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.2-dev
   - name: pepper
-    image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.2
-    ports:
-    - containerPort: 4234
-
+    image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.2-dev
   tolerations:
   - key: "node.kubernetes.io/not-ready"
     operator: "Exists"
