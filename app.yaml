@@ -31,7 +31,7 @@ spec:
   containers:
   - name: jarvis
     image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.3
-     env:
+    env:
     - name: DATABASE_URL
       value: "sqlite:///storage/data.db"
     - name: DATABASE_PATH
@@ -51,7 +51,7 @@ spec:
     - name: DEBUG
       value: "True"
     - name: PORT
-      value: "3000"  # Based on the port mapping in your Docker command
+      value: "3000"
     volumeMounts:
     - name: storage-volume
       mountPath: /tmp/storage
