@@ -30,9 +30,9 @@ spec:
             - arm64
   containers:
   - name: jarvis
-    image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.2-dev
+    image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.3
   - name: pepper
-    image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.2-dev
+    image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.3
   tolerations:
   - key: "node.kubernetes.io/not-ready"
     operator: "Exists"
@@ -44,27 +44,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {openai.app.registered_name}-{openai.app.edge.node_name}-pepper
+  name: {openai.app.registered_name}-{openai.app.edge.node_name}
 spec:
   ports:
-  - name: pepper-port
+  - name: pepper
     port: {openai.app.edge.deploy.ports.0}
     targetPort: 4234
-  externalIPs:
-  - {cluster.ip}
-  - {openai.app.edge.node_public_ip}
-  selector:
-    app: {openai.app.registered_name}-{openai.app.edge.node_name}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {openai.app.registered_name}-{openai.app.edge.node_name}-jarvis
-spec:
-  ports:
-  - name: jarvis-port
-    port: {openai.app.edge.deploy.ports.1}
-    targetPort: 3000
   externalIPs:
   - {cluster.ip}
   - {openai.app.edge.node_public_ip}
