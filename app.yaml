@@ -31,8 +31,43 @@ spec:
   containers:
   - name: jarvis
     image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.3
+     env:
+    - name: DATABASE_URL
+      value: "sqlite:///storage/data.db"
+    - name: DATABASE_PATH
+      value: "storage/data.db"
+    - name: ALLOWED_ORIGINS
+      value: "*"
+    - name: APP_LOG_FILE
+      value: "./app.log"
+    - name: RUN_LOG_FILE
+      value: "./run.log"
+    - name: MAX_FILE_SIZE
+      value: "524288000"
+    - name: ALLOWED_FILE_TYPES
+      value: ".mp4"
+    - name: STORAGE_PATH
+      value: "./storage"
+    - name: DEBUG
+      value: "True"
+    - name: PORT
+      value: "3000"  # Based on the port mapping in your Docker command
+    volumeMounts:
+    - name: storage-volume
+      mountPath: /tmp/storage
+    - name: app-log
+      mountPath: /tmp/app.log
+    - name: run-log
+      mountPath: /tmp/run.log 
   - name: pepper
     image: devasiabayacr.azurecr.io/abs-stark-pepper:0.0.3
+    env:
+    - name: JARVIS_URL
+      value: "http://localhost"
+    - name: JARVIS_PORT
+      value: "3000"
+    - name: PROXY_PORT
+      value: "5085"
   tolerations:
   - key: "node.kubernetes.io/not-ready"
     operator: "Exists"
