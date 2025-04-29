@@ -33,21 +33,21 @@ spec:
     image: devasiabayacr.azurecr.io/abs-stark-jarvis:0.0.3
     env:
     - name: DATABASE_URL
-      value: "sqlite:///storage/data.db"
+      value: "sqlite:///tmp/storage/data.db" 
     - name: DATABASE_PATH
-      value: "storage/data.db"
+      value: "/tmp/storage/data.db"
     - name: ALLOWED_ORIGINS
       value: "*"
     - name: APP_LOG_FILE
-      value: "./app.log"
+      value: "/tmp/app.log"
     - name: RUN_LOG_FILE
-      value: "./run.log"
+      value: "/tmp/run.log"
     - name: MAX_FILE_SIZE
       value: "524288000"
     - name: ALLOWED_FILE_TYPES
       value: ".mp4"
     - name: STORAGE_PATH
-      value: "./storage"
+      value: "/tmp/storage" 
     - name: DEBUG
       value: "True"
     - name: PORT
@@ -68,6 +68,15 @@ spec:
       value: "3000"
     - name: PROXY_PORT
       value: "5085"
+
+  volumes:
+  - name: storage-volume
+    emptyDir: {}
+  - name: app-log
+    emptyDir: {}
+  - name: run-log
+    emptyDir: {}
+
   tolerations:
   - key: "node.kubernetes.io/not-ready"
     operator: "Exists"
